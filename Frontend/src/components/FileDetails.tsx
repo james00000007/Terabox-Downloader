@@ -5,24 +5,16 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { TeraboxFile } from '@/types/terabox';
 import FilePreview from './FilePreview';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { formatFileSize } from '@/lib/formatFileSize';
-import { useTheme } from './theme-provider';
 
 interface FileDetailsProps {
   file: TeraboxFile;
 }
 
 export default function FileDetails({ file }: FileDetailsProps) {
-  const { theme } = useTheme() || { theme: 'light' }; // Fallback for theme context
   const [copied, setCopied] = useState(false);
   const [copiedSource, setCopiedSource] = useState(false);
-
-  useEffect(() => {
-    console.log('Current Theme:', theme);
-    console.log('Copy Icon Rendered:', !!Copy);
-    console.log('Check Icon Rendered:', !!Check);
-  }, [theme]);
 
   const handleCopySource = async () => {
     try {

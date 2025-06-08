@@ -10,6 +10,7 @@ import { TeraboxFile } from '@/types/terabox';
 import { formatDistanceToNow } from 'date-fns';
 import { formatFileSize } from '@/lib/formatFileSize';
 import { useTheme } from './theme-provider';
+import { getCleanedHistory, cleanExpiredHistory, type HistoryItem } from '@/lib/historyUtils';
 
 interface HistorySectionProps {
   onSelectFile: (file: TeraboxFile) => void;
@@ -17,19 +18,24 @@ interface HistorySectionProps {
 
 export default function HistorySection({ onSelectFile }: HistorySectionProps) {
   const { theme } = useTheme() || { theme: 'light' }; // Fallback for theme context
-  const [history, setHistory] = useState<(TeraboxFile & { fetchedAt: string })[]>([]);
+  const [history, setHistory] = useState<HistoryItem[]>([]);
   const [isOpen, setIsOpen] = useState(true);
 
   useEffect(() => {
-    const storedHistory = localStorage.getItem('terabox-history');
-    if (storedHistory) {
-      setHistory(JSON.parse(storedHistory));
-    }
+    // Load and clean history on component mount
+    const cleanedHistory = getCleanedHistory();
+    setHistory(cleanedHistory);
   }, []);
 
+  // Periodically clean expired history (every hour)
   useEffect(() => {
-    console.log('Current Theme:', theme); // Debugging theme
-  }, [theme]);
+    const interval = setInterval(() => {
+      const cleanedHistory = getCleanedHistory();
+      setHistory(cleanedHistory);
+    }, 60 * 60 * 1000); // Run every hour
+
+    return () => clearInterval(interval);
+  }, []);
 
   const clearHistory = () => {
     localStorage.removeItem('terabox-history');
@@ -39,8 +45,9 @@ export default function HistorySection({ onSelectFile }: HistorySectionProps) {
   const removeHistoryItem = (index: number) => {
     const newHistory = [...history];
     newHistory.splice(index, 1);
-    setHistory(newHistory);
-    localStorage.setItem('terabox-history', JSON.stringify(newHistory));
+    const cleanedHistory = cleanExpiredHistory(newHistory);
+    setHistory(cleanedHistory);
+    localStorage.setItem('terabox-history', JSON.stringify(cleanedHistory));
   };
 
   return (

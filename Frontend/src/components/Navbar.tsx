@@ -25,11 +25,6 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Debugging log for theme and size verification
-  useEffect(() => {
-    console.log('Theme:', theme, 'Current Theme:', currentTheme, 'setTheme:', setTheme);
-  }, [theme, currentTheme]);
-
   return (
     <motion.header
       className={`sticky top-0 z-10 backdrop-blur-sm ${

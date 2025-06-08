@@ -95,9 +95,6 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: ^1.1.2
         version: 1.2.6(@types/react-dom@18.3.7(@types/react@18.3.21))(@types/react@18.3.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      adblock-detector:
-        specifier: ^2.1.0
-        version: 2.1.0
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.1
@@ -1403,9 +1400,6 @@ packages:
     resolution: {integrity: sha512-OvQ/2pUDKmgfCg++xsTX1wGxfTaszcHVcTctW4UJB4hibJx2HXxxO5UmVgyjMa+ZDsiaf5wWLXYpRWMmBI0QHg==}
     engines: {node: '>=0.4.0'}
     hasBin: true
-
-  adblock-detector@2.1.0:
-    resolution: {integrity: sha512-CqMlaHhAKG7l96b84r53b9alJsfRCaRcbvrSvZprkNZHYoFqXKE7XIV6URyDihAu2nibBPvWBe+UpftVGboGBA==}
 
   ajv@6.12.6:
     resolution: {integrity: sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g==}
@@ -3659,8 +3653,6 @@ snapshots:
       acorn: 8.14.1
 
   acorn@8.14.1: {}
-
-  adblock-detector@2.1.0: {}
 
   ajv@6.12.6:
     dependencies:

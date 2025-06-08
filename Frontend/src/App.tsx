@@ -8,7 +8,7 @@ import HistorySection from './components/HistorySection';
 import { TeraboxFile } from './types/terabox';
 import { useToast } from '@/hooks/use-toast';
 import { motion, AnimatePresence } from 'framer-motion';
-import AdsBlockMessage from './components/ads.tsx';
+import { addToHistory } from '@/lib/historyUtils';
 
 // Load API base URL: local proxy in dev or real worker URL in production
 const WORKER_URL = import.meta.env.VITE_WORKER_URL;
@@ -64,14 +64,8 @@ function App() {
       // set current file including sourceLink and fetchedAt
       setCurrentFile(fileWithSource);
       // store in session cache
-      sessionCache.current[link] = fileWithSource;
-      // Add to history in localStorage
-      const history = JSON.parse(localStorage.getItem('terabox-history') || '[]');
-      const newHistory = [
-        fileWithSource,
-        ...history.filter((item: TeraboxFile) => item.file_name !== data.file_name),
-      ].slice(0, 10); // Keep only 10 most recent
-      localStorage.setItem('terabox-history', JSON.stringify(newHistory));
+      sessionCache.current[link] = fileWithSource;      // Add to history using the utility function that handles 24-hour expiry
+      addToHistory(fileWithSource);
       
       toast({
         title: "Success!",
@@ -136,7 +130,6 @@ function App() {
         </main>
         <Toaster />
       </div>
-      <AdsBlockMessage />
     </ThemeProvider>
   );
 }
