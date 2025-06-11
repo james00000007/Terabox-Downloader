@@ -8,6 +8,7 @@ import HistorySection from './components/HistorySection';
 import { TeraboxFile } from './types/terabox';
 import { useToast } from '@/hooks/use-toast';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from './components/ui/dialog';
 import { addToHistory } from '@/lib/historyUtils';
 
 // Load API base URL: local proxy in dev or real worker URL in production
@@ -26,6 +27,7 @@ const containerVariants = {
 function App() {
   const [currentFile, setCurrentFile] = useState<TeraboxFile | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showNotice, setShowNotice] = useState(true);
   // session-only cache for file details to avoid re-fetching same link
   const sessionCache = useRef<Record<string, TeraboxFile>>({});
   const { toast } = useToast();
@@ -87,6 +89,18 @@ function App() {
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="terabox-theme">
+      {/* Unavailable notice popup */}
+      <Dialog open={showNotice} onOpenChange={setShowNotice}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Notice</DialogTitle>
+            <DialogDescription>
+              May be Currently unavailable due to recent changes in Terabox.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogClose>Close</DialogClose>
+        </DialogContent>
+      </Dialog>
       <div className="min-h-screen flex flex-col bg-background text-foreground overflow-x-hidden overflow-y-auto">
         <Navbar />
         <main className="container mx-auto px-4 md:px-6 py-6 md:py-8">
